@@ -8,8 +8,8 @@
  * （3）合并：从下往上，将有序的子数组两两合并，最终使整个数组有序；
  *
  * 【性能分析】
- * 时间复杂度：O(nlogn) 为平均复杂度，时间复杂度取值区间实际为 [O(n), O(nlogn)]
- * 空间复杂度：O(n) 对于递归版，除了单独的数组空间，还有递归的空间logn，递归版的实际空间复杂度为 O(n+logn)
+ * 时间复杂度：O(NlogN) 为平均复杂度，时间复杂度取值区间实际为 [O(N), O(NlogN)]
+ * 空间复杂度：O(N) 对于递归版，除了单独的数组空间，还有递归的空间logN，递归版的实际空间复杂度为 O(N+logN)
  * 稳定性：稳定
  *
  * 【算法总结】
@@ -25,10 +25,11 @@
 using namespace std;
 
 /** NumType为基础数字类型 */
-template<typename NumType>
-void RecursionCall(vector<NumType>& dataArr, vector<NumType>& tempArr, unsigned int minIdx, unsigned int maxIdx)
+template <typename NumType>
+void RecursionCall(vector<NumType> &dataArr, vector<NumType> &tempArr, unsigned int minIdx, unsigned int maxIdx)
 {
-	if (minIdx >= maxIdx) return;
+	if (minIdx >= maxIdx)
+		return;
 
 	unsigned int divIdx = static_cast<unsigned int>((minIdx + maxIdx) / 2);
 	RecursionCall(dataArr, tempArr, minIdx, divIdx);
@@ -38,41 +39,39 @@ void RecursionCall(vector<NumType>& dataArr, vector<NumType>& tempArr, unsigned 
 	unsigned int rightIdx = divIdx + 1;
 	unsigned int idx = minIdx;
 
-	// 合并局部有序的部分 
+	// 合并局部有序的部分
 	while (leftIdx <= divIdx && rightIdx <= maxIdx)
-		tempArr[idx++] = (dataArr[leftIdx] < dataArr[rightIdx]) ?
-			dataArr[leftIdx++] : dataArr[rightIdx++];
+		tempArr[idx++] = (dataArr[leftIdx] < dataArr[rightIdx]) ? dataArr[leftIdx++] : dataArr[rightIdx++];
 
-	// 有一部分区间已经合并完，追加剩余部分，以下两个while循环，只可能同时触发一个 
+	// 有一部分区间已经合并完，追加剩余部分，以下两个while循环，只可能同时触发一个
 	while (leftIdx <= divIdx)
 		tempArr[idx++] = dataArr[leftIdx++];
 	while (rightIdx <= maxIdx)
 		tempArr[idx++] = dataArr[rightIdx++];
 
-	// 本次函数内始终操作的是[minIdx, maxIdx]，所以在合并排序完成后要同位置赋值回去 
-	for (idx = minIdx; idx <= maxIdx; ++idx) {
+	// 本次函数内始终操作的是[minIdx, maxIdx]，所以在合并排序完成后要同位置赋值回去
+	for (idx = minIdx; idx <= maxIdx; ++idx)
 		dataArr[idx] = tempArr[idx];
-	}
 }
 
 /** NumType为基础数字类型 */
-template<typename NumType>
-void MergeSort_Recursion(vector<NumType>& dataArr)
+template <typename NumType>
+void MergeSort_Recursion(vector<NumType> &dataArr)
 {
 	vector<NumType> tempArr(dataArr.size());
 	RecursionCall(dataArr, tempArr, 0, dataArr.size() - 1);
 }
 
 /** NumType为基础数字类型 */
-template<typename NumType>
-void MergeSort_Iteration(vector<NumType>& dataArr)
+template <typename NumType>
+void MergeSort_Iteration(vector<NumType> &dataArr)
 {
 	unsigned int dataSize = dataArr.size();
 	vector<NumType> tempArr(dataSize);
 
 	unsigned int minIdx, divIdx, maxIdx, leftIdx, rightIdx, idx;
 	minIdx = divIdx = maxIdx = leftIdx = rightIdx = idx = 0;
-	
+
 	for (unsigned int step = 1; step < dataSize; step *= 2)
 	{
 		for (unsigned int n = 0; n < dataSize;)
@@ -84,22 +83,24 @@ void MergeSort_Iteration(vector<NumType>& dataArr)
 			 */
 			divIdx = min(dataSize - 1, minIdx + step - 1);
 			maxIdx = min(dataSize - 1, divIdx + step);
-			// 更新下一波合并的起始下标 
+			// 更新下一波合并的起始下标
 			n = maxIdx + 1;
 
 			leftIdx = minIdx;
 			rightIdx = min(dataSize, divIdx + 1);
-
 			idx = minIdx;
-			while (leftIdx <= divIdx && rightIdx <= maxIdx)
-				tempArr[idx++] = (dataArr[leftIdx] < dataArr[rightIdx]) ?
-					dataArr[leftIdx++] : dataArr[rightIdx++];
 
-			while (leftIdx <= divIdx) 
+			// 合并局部有序的部分
+			while (leftIdx <= divIdx && rightIdx <= maxIdx)
+				tempArr[idx++] = (dataArr[leftIdx] < dataArr[rightIdx]) ? dataArr[leftIdx++] : dataArr[rightIdx++];
+
+			// 有一部分区间已经合并完，追加剩余部分，以下两个while循环，只可能同时触发一个
+			while (leftIdx <= divIdx)
 				tempArr[idx++] = dataArr[leftIdx++];
-			while (rightIdx <= maxIdx) 
+			while (rightIdx <= maxIdx)
 				tempArr[idx++] = dataArr[rightIdx++];
 
+			// 本次函数内始终操作的是[minIdx, maxIdx]，所以在合并排序完成后要同位置赋值回去
 			for (idx = minIdx; idx <= maxIdx; ++idx)
 				dataArr[idx] = tempArr[idx];
 		}
@@ -108,7 +109,7 @@ void MergeSort_Iteration(vector<NumType>& dataArr)
 
 int main()
 {
-	vector<int> arrRecursion = { 2, 4, 54, 23, 44, 65, 25, 76, 16, 54, 77, 3, 7, 6, 9, 5 };
+	vector<int> arrRecursion = {2, 4, 54, 23, 44, 65, 25, 76, 16, 54, 77, 3, 7, 6, 9, 5};
 
 	cout << "Array data:\n";
 	for (vector<int>::iterator itr = arrRecursion.begin(); itr != arrRecursion.end(); ++itr)
@@ -118,9 +119,9 @@ int main()
 	for (vector<int>::iterator itr = arrRecursion.begin(); itr != arrRecursion.end(); ++itr)
 		cout << *itr << ", ";
 
-	vector<int> arrIteration = { 2, 4, 54, 23, 44, 65, 25, 76, 16, 54, 77, 3, 7, 6, 9, 5 };
+	vector<int> arrIteration = {2, 4, 54, 23, 44, 65, 25, 76, 16, 54, 77, 3, 7, 6, 9, 5};
 
-	cout << "\nArray data:\n";
+	cout << "\n\nArray data:\n";
 	for (vector<int>::iterator itr = arrIteration.begin(); itr != arrIteration.end(); ++itr)
 		cout << *itr << ", ";
 	MergeSort_Iteration(arrIteration);

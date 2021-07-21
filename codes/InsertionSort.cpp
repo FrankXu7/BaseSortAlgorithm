@@ -8,12 +8,12 @@
  * 初始从下标1开始作为未排序元素的部分。
  *
  * 【性能分析】
- * 时间复杂度：O(n^2)
+ * 时间复杂度：O(N^2)
  * 空间复杂度：O(1)
  * 稳定性：稳定
  *
  * 【算法总结】
- * 由于其最差O(n^2)的时间复杂度，显然是不适用于大量数据的。一般将插入排序作为快速排序的补充，比如数据元素
+ * 由于其最差O(N^2)的时间复杂度，显然是不适用于大量数据的。一般将插入排序作为快速排序的补充，比如数据元素
  * 的数量小于一定的阈值，就采用插入排序，否则就采用快速排序。当数据量较小时，插入排序是较优的选择。
  *
  * @author FrankX
@@ -24,34 +24,34 @@
 using namespace std;
 
 /** NumType代表基本的数字类型 */
-template<typename NumType>
-void InsertionSort(vector<NumType>& dataArr)
+template <typename NumType>
+void InsertionSort(vector<NumType> &dataArr)
 {
 	unsigned int dataSize = dataArr.size();
 	unsigned idx = 0;
 	NumType tempData = 0;
-	
+
 	for (unsigned int n = 1; n < dataSize; ++n)
 	{
 		idx = n;
 		tempData = dataArr[n];
 
-		// 此处需要注意分支语句中，自加/减运算会先执行，然后再进行比较 
+		// 此处需要注意分支语句中，自加/减运算会先执行，然后再进行比较
 		while (--idx >= 0 && dataArr[idx] > tempData)
 		{
-			// 插入排序的数据后移 
+			// 插入排序的数据后移
 			dataArr[idx + 1] = dataArr[idx];
 		}
 
-		// 这一步才是 dataArr[n] 元素确认排序位置的操作 
+		// 这一步才是 dataArr[n] 元素确认排序位置的操作
 		dataArr[idx + 1] = tempData;
 	}
 }
 
 int main()
 {
-	vector<int> dataArr = { 2, 3, 21, 2, 16, 43, 55, 65, 57, 8, 99, 65, 163, 7 };
-	
+	vector<int> dataArr = {2, 3, 21, 2, 16, 43, 55, 65, 57, 8, 99, 65, 163, 7};
+
 	cout << "Array data:\n";
 	for (vector<int>::iterator itr = dataArr.begin(); itr != dataArr.end(); ++itr)
 		cout << *itr << ", ";
