@@ -2,14 +2,14 @@
  * 【计数排序算法】
  *
  * 【基本思路】
- * 生成一个序列，以生成序列中元素下标的下标值作为分类，统计在数组中，元素值等于序列下标时的数量，相较于桶排序，
- * 这个统计行为减少了一定的空间复杂度。和桶排序一样，为了保证数组元素一定有一个对应下标值的生成序列元素，
- * 需要找出数组的最大值。然后再次遍历数组，将生成序列中下标值与数组元素相同序列元素+1. 最后，按需要的顺序
- * 遍历生成序列，将非零的序列元素，取出元素值对应数量的下标值，追加到数组，即得到一个有序数组。
+ * 生成一个序列，以计数序列中元素下标的下标值作为分类，统计在数组中，元素值等于序列下标时的数量，相较于桶排序，
+ * 这个统计行为减少了一定的空间复杂度。和桶排序一样，为了保证数组元素一定有一个对应下标值的计数序列元素，
+ * 需要找出数组的最大值。然后再次遍历数组，将计数序列中下标值与数组元素相同序列元素+1. 最后，按需要的顺序
+ * 遍历计数序列，将非零的序列元素，取出元素值对应数量的下标值，追加到数组，即得到一个有序数组。
  *
  * 【性能分析】
- * 时间复杂度：O(N) 实际上是O(3N)，找出最大元素，将元素个数统计到序列内，从序列中生成元素，都要进行一次遍历
- * 空间复杂度：O(M) M表示生成序列元素的个数，可能会远远大于元素数量N
+ * 时间复杂度：O(N) 实际上是O(3N)，找出最大元素，将元素个数统计到计数序列中，从计数序列中生成元素，都要进行遍历
+ * 空间复杂度：O(M) M表示计数序列元素的个数，可能会远远大于元素数量N
  * 稳定性：稳定 
  *
  * 【算法总结】
@@ -25,14 +25,12 @@
 #include <vector>
 using namespace std;
 
-/** NumType为基础数字类型 */
-template<typename NumType>
-void CountingSort(vector<NumType>& dataArr)
+void CountingSort(vector<unsigned int>& dataArr)
 {
 	// 找出最大值用于确定序列大小 
-	typename vector<NumType>::iterator itr = dataArr.begin();
-	NumType maxNum = *(itr++);
-	for (typename vector<NumType>::iterator itr = dataArr.begin(); itr != dataArr.end(); ++itr)
+	vector<unsigned int>::iterator itr = dataArr.begin();
+	unsigned int maxNum = *(itr++);
+	for (typename vector<unsigned int>::iterator itr = dataArr.begin(); itr != dataArr.end(); ++itr)
 	{
 		if (*itr > maxNum) maxNum = *itr;
 	}

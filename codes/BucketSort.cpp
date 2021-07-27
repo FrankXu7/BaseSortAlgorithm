@@ -27,21 +27,19 @@
 #include <deque>
 using namespace std;
 
-/** NumType为基础数字类型 */
-template<typename NumType>
-void BucketSort(vector<NumType>& dataArr)
+void BucketSort(vector<unsigned int>& dataArr)
 {
 	// 找出最大元素 
-	typename vector<NumType>::iterator itr = dataArr.begin();
-	NumType maxNum = *(itr++);
+	vector<unsigned int>::iterator itr = dataArr.begin();
+	unsigned int maxNum = *(itr++);
 	for (; itr != dataArr.end(); ++itr)
 	{
 		if (*itr > maxNum) maxNum = *itr;
 	}
 
-	vector<deque<NumType>> buckets;
+	vector<deque<unsigned int>> buckets;
 	// +1相当于将下标0元素弃用，便于逻辑理解 
-	buckets.resize(static_cast<unsigned int>(maxNum + 1));
+	buckets.resize(maxNum + 1);
 
 	// 将元素放在桶里 
 	for (itr = dataArr.begin(); itr != dataArr.end(); ++itr)
@@ -51,7 +49,7 @@ void BucketSort(vector<NumType>& dataArr)
 
 	unsigned int idx = 0;
 	// 依次从桶里取出元素 
-	for (typename vector<deque<NumType>>::iterator itd = buckets.begin(); itd != buckets.end(); ++itd)
+	for (typename vector<deque<unsigned int>>::iterator itd = buckets.begin(); itd != buckets.end(); ++itd)
 	{
 		// 运算符优先级（从高到低）：间接成员运算符(->) 直接成员运算符(.) 逻辑非(!) 解除引用(*) 
 		while (!(*itd).empty())
