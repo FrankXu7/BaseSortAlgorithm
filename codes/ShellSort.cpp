@@ -49,7 +49,7 @@ void ShellSort(vector<NumType>& dataArr)
 	for (int step = TO_INT(dataSize / 2); step > 0; step = TO_INT(step / 2))
 	{
 		// 这里其实就是直接插入排序了，只不过自定义了步长 
-		for (int n = step; n < dataSize; n += step)
+		for (int n = step; n < dataSize; ++n)
 		{
 			idx = n;
 			curNum = dataArr[idx];
@@ -59,11 +59,11 @@ void ShellSort(vector<NumType>& dataArr)
 			 * 退化为直接插入排序，但此时，数组已经基本有序，直接插入效率能接近O(N)，
 			 * 本质上就是这个while循环被执行的次数大大减少 
 			 */
-			while (--idx >= 0 && dataArr[idx] > curNum)
+			while ((idx -= step) >= 0 && dataArr[idx] > curNum)
 			{
-				dataArr[idx + 1] = dataArr[idx];
+				dataArr[idx + step] = dataArr[idx];
 			}
-			dataArr[idx + 1] = curNum;
+			dataArr[idx + step] = curNum;
 		}
 	}
 }
